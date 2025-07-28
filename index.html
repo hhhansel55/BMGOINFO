@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<!-- saved from url=(0060)file:///C:/Users/userwik/Downloads/ai_studio_code%20(1).html -->
+<html lang="zh-Hant"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>表格</title>
+    <style>
+        body {
+            background-color: #1e1e1e; /* 深色背景 */
+            color: #e0e0e0; /* 淺色文字 */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        /* --- 表格整體樣式 --- */
+        table {
+            width: 80%;
+            border-collapse: collapse; /* 移除儲存格間距 */
+            table-layout: fixed; /* 固定欄寬比例 */
+        }
+
+        /* --- 儲存格樣式 --- */
+        td {
+            padding: 15px;
+            text-align: center;      /* 文字水平置中 */
+            vertical-align: middle;  /* 文字垂直置中 */
+            border: none;            /* 移除所有框線 */
+            background-color: #1e1e1e;
+            min-height: 40px; /* 確保空行也有基本高度 */
+            word-wrap: break-word; /* 長單字自動換行 */
+            outline: none; /* 移除點擊時的預設外框 */
+        }
+
+        .label {
+            text-align: center;
+        }
+
+        .content {
+            text-align: left;
+        }
+
+        .controls {
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #2c2c2c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        td.empty::before {
+            content: attr(data-placeholder);
+            color: #666;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <table id="myTable">
+        <colgroup>
+            <col style="width: 20%;">
+            <col style="width: 80%;">
+        </colgroup>
+        <tbody>
+        <tr>
+            <td contenteditable="true" data-placeholder="標題" class="label"><b>Poseidon Trident 海王三叉戟</b><br><img src="./ai_studio_code_files/1354721693955919979.webp" alt=":PoseidonWeapon:"><br></td>
+            <td contenteditable="true" data-placeholder="內文" class="content"><b>(DMG🗡️22 +&nbsp;</b><b>CRI RATE🎯25%)</b><br>可發射「水泡」進行遠程攻擊。</td>
+        </tr>
+        <tr>
+            <td contenteditable="true" data-placeholder="標題" class="label"><b>Zeus' Lighting 宙斯閃電</b><br><img src="./ai_studio_code_files/1354721867151446077.webp" alt=":ZeusWeapon:"></td>
+            <td contenteditable="true" data-placeholder="內文" class="content"><b>(DMG🗡️22)</b> <br>每降低2%<b>HP❤️</b>，<b>真傷 + 0.16</b>。</td>
+        </tr>
+        <tr>
+            <td contenteditable="true" data-placeholder="標題" class="label"><b>Sword of Hades 哈迪斯劍</b><br><img src="./ai_studio_code_files/1354722045061107723.webp" alt=":HadesWeapon:"></td>
+            <td contenteditable="true" data-placeholder="內文" class="content"><b>(DMG🗡️22)</b>&nbsp;<br>每4次命中，造成&nbsp;<b>Max HP</b>*6% 的<b>真傷</b>，恢復<b>HP❤️</b>8%。</td>
+        </tr>
+        <tr>
+            <td contenteditable="true" data-placeholder="標題" class="label"><b>Spear of Ares 阿瑞斯矛</b><br><img src="./ai_studio_code_files/1354722398938857583.webp" alt=":AresWeapon:"></td>
+            <td contenteditable="true" data-placeholder="內文" class="content"><b>(DMG🗡️22)</b>&nbsp;<br>每3次命中，恢復&nbsp;<b>HP❤️</b>5%，降低對手 3&nbsp;<b>DEF🛡️</b>&nbsp;五秒。</td>
+        </tr>
+        <tr>
+            <td contenteditable="true" data-placeholder="標題" class="label"><b>Apollo's Sun Sword<br>阿波羅日輪劍</b><br><img src="./ai_studio_code_files/1354894116181377172.webp" alt=":ApolloWeapon:"></td>
+            <td contenteditable="true" data-placeholder="內文" class="content"><b>(DMG🗡️22)(吸血🩸 +6%)</b>&nbsp;<br>20%機率「暈眩」目標1秒。</td>
+        </tr>
+        <tr>
+            <td contenteditable="true" data-placeholder="標題" class="label"><b>Fenrir's God-Killing Sword 芬尼爾弒神劍</b><br><img src="./ai_studio_code_files/1354894426224328815.webp" alt=":FenrirWeapon:"></td>
+            <td contenteditable="true" data-placeholder="內文" class="content"><b>(DMG🗡️22)(吸血🩸 +6%)<br></b>每4次命中，對周圍敵人造成<b>&nbsp;</b>8<b>🗡️</b>&nbsp;傷害。</td>
+        </tr>
+        <tr>
+            <td contenteditable="true" data-placeholder="標題" class="label"><b>Valkyrie's Divine Dual Blades 瓦爾基里雙刃</b><br><img src="./ai_studio_code_files/1354894568444661890.webp" alt=":ValkyrieWeapon:"></td>
+            <td contenteditable="true" data-placeholder="內文" class="content"><b>(DMG🗡️22)(吸血🩸 +8%)<br></b>35%機率觸發「連擊」。</td>
+        </tr>
+        <tr>
+            <td contenteditable="true" data-placeholder="標題" class="label"><b>Jormungandr's White Snake Sword<br>耶夢加得白蛇劍</b><br><img src="./ai_studio_code_files/1354894784107380967.webp" alt=":JormungandrWeapon:"></td>
+            <td contenteditable="true" data-placeholder="內文" class="content"><b>(DMG🗡️22)<br></b>每次命中，獲得<b>真傷+1</b>，持續4秒（最多8層）。<br>被攻擊時，36%機率減少1層。</td>
+        </tr>
+        <tr>
+            <td contenteditable="true" data-placeholder="標題" class="label"><b>Mjollnir<br>雷神之槌</b><br><img src="./ai_studio_code_files/1354894939552485516.webp" alt=":ThorWeapon:"><br><br></td>
+            <td contenteditable="true" data-placeholder="內文" class="content"><b>(DMG🗡️22)</b> <br>每次攻擊獲得1層「靜電」，有25%機率「釋放」。<br>每釋放一層靜電，<b>DMG🗡️</b>+3，恢復&nbsp;<b>HP❤️</b>（<b>DMG🗡️</b>&nbsp;<b>*</b>&nbsp;10%&nbsp;<b>*</b>&nbsp;層數）。</td>
+        </tr>
+        <tr>
+            <td contenteditable="true" data-placeholder="標題" class="label"><b>Helheim Sword<br>冥府劍</b><br><img src="./ai_studio_code_files/1354895125263941783.webp" alt=":HelheimWeapon:"></td>
+            <td contenteditable="true" data-placeholder="內文" class="content"><b>(DMG🗡️22)<br></b>每4次命中，竊取對手<b>HP❤️</b>（<b>DEF🛡️</b>的20%）與&nbsp;<b>DMG🗡️&nbsp;</b><b>*</b>&nbsp;6，持續1秒。</td>
+        </tr>
+        <tr>
+            <td contenteditable="true" data-placeholder="標題" class="label"><b>Hermes's Scepter Sword<br>赫爾莫斯權杖劍</b><br><img src="./ai_studio_code_files/1354895268910207056.webp"></td>
+            <td contenteditable="true" data-placeholder="內文" class="content"><b>(DMG🗡️22)</b> <br>每降低10%<b>HP❤️</b>，<b>速度+1.5%</b>。<br>35%機率「斬首」，造成目標 <b>已損失HP&nbsp;</b>* 20% 的傷害（最高25），恢復 <b>HP❤️</b>（該傷害 * 40%）。</td>
+
+        </tr>
+        <tr>
+            <td contenteditable="true" data-placeholder="標題" class="label"><b>Flame Excalibur 火神劍</b><br><img src="./ai_studio_code_files/1354895631000404109.webp" alt=":HephaestusWeapon:"></td>
+            <td contenteditable="true" data-placeholder="內文" class="content"><b>(DMG🗡️22)</b> <br>每4次命中，將敵人捲入「火焰漩渦」。2秒內攻擊 1~3 次。每次攻擊造成&nbsp;<b>Max HP</b>&nbsp;* 3% 的傷害，恢復等量<b>HP❤️</b>。</td>
+        </tr>
+        <tr>
+            <td contenteditable="true" data-placeholder="標題" class="label"><b>Permafrost Sword 臻冰劍</b><br><img src="./ai_studio_code_files/1354895763775295489.webp" alt=":ChioneWeapon:"></td>
+            <td contenteditable="true" data-placeholder="內文" class="content"><b>(DMG🗡️22 + 吸血🩸6%)</b> <br>每5次命中，對目標造成2秒「冰凍」（被冰凍期間無法移動，受擊造成 1~5點<b>&nbsp;</b><span style="color: oklab(0.952331 0.000418991 -0.00125992); font-family: &quot;gg sans&quot;, &quot;Microsoft JhengHei&quot;, 微軟正黑體, &quot;Microsoft JhengHei UI&quot;, &quot;Microsoft YaHei&quot;, 微軟雅黑, 宋体, SimSun, &quot;Noto Sans&quot;, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; font-size: 14px; white-space-collapse: preserve-breaks; background-color: oklab(0.262384 0.00252247 -0.00889932);">的 additional damage&nbsp;</span>並解除）。</td>
+        </tr>
+        <tr>
+            <td contenteditable="true" data-placeholder="標題" class="label"><b>Medusa's Spear 梅杜莎矛</b><br><img src="./ai_studio_code_files/1354895907144994817.webp" alt=":MedusaWeapon:"></td>
+            <td contenteditable="true" data-placeholder="內文" class="content"><div><b>(DMG🗡️22)</b></div><div>25%機率施加「中毒」狀態三秒（最多3層）。</div><div>中毒效果：目標所受治療效果減半；每層每秒竊取<b>HP❤️</b>（DMG🗡️ * 10%）</div></td>
+        </tr>
+        <tr>
+            <td contenteditable="true" data-placeholder="標題" class="label"><b>Rainbow Cat Sword<br>彩虹貓劍</b><br><img src="./ai_studio_code_files/1356191495287476244.webp" alt=":MeowWeapon:"></td>
+            <td contenteditable="true" data-placeholder="內文" class="content"><b>(DMG🗡️22 + 吸血🩸6%)</b> <br>每次命中，獲得&nbsp;<b>DMG🗡️+2 </b>四秒（最多6層）。被攻擊時，30%機率減少1層。</td>
+        </tr>
+        <tr>
+            <td contenteditable="true" data-placeholder="標題" class="label"><b>Sin of Pride Sword 傲慢劍</b><br><img src="./ai_studio_code_files/1354896071855177879.webp" alt=":SinOfPrideWeapon:"></td>
+            <td contenteditable="true" data-placeholder="內文" class="content"><b>(DMG🗡️22)</b> <br>每次命中，獲得&nbsp;<b>DMG🗡️+2.5&nbsp;</b>四秒（最多7層）。<br>當&nbsp;<b>DMG🗡️≥40</b>，<b>吸血🩸+12%</b>。</td>
+        </tr>
+        <tr>
+            <td contenteditable="true" data-placeholder="標題" class="label"><b>Sin of Envy Blade<br>嫉妒劍</b><br><img src="./ai_studio_code_files/1354896267930501211.webp" alt=":SinOfEnvyWeapon:"></td>
+            <td contenteditable="true" data-placeholder="內文" class="content"><b>(DMG🗡️22)</b> <br>近戰攻擊造成&nbsp;<b>Max HP</b>&nbsp;3% 的&nbsp;<span style="color: oklab(0.952331 0.000418991 -0.00125992); font-family: &quot;gg sans&quot;, &quot;Microsoft JhengHei&quot;, 微軟正黑體, &quot;Microsoft JhengHei UI&quot;, &quot;Microsoft YaHei&quot;, 微軟雅黑, 宋体, SimSun, &quot;Noto Sans&quot;, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; font-size: 14px; white-space-collapse: preserve-breaks; background-color: oklab(0.262384 0.00252247 -0.00889932);">additional damage</span>。<br>如果目標<b>HP❤️</b> &gt; 自身，恢復自身&nbsp;<b>HP❤️</b>4%。</td>
+        </tr>
+        <tr>
+            <td contenteditable="true" data-placeholder="標題" class="label"><b>Sin of Gluttony Blade<br>暴食劍</b><br><img src="./ai_studio_code_files/1361249851291205662.webp" alt=":SinOfGluttonyWeapon:"></td>
+            <td contenteditable="true" data-placeholder="內文" class="content"><b>(DMG🗡️22)</b> <br>受到近戰或技能傷害時，獲得<b>吸血🩸+8%</b>（最多6層）。<br>滿層時重置，對周圍敵人造成&nbsp;12<b>🗡️</b>&nbsp;的傷害，並獲得&nbsp;<b>真傷+3&nbsp;</b>兩秒。</td>
+        </tr>
+        <tr>
+            <td contenteditable="true" data-placeholder="標題" class="label"><b>Sin of Wrath Demon Sword<br>憤怒劍</b><br><br></td>
+            <td contenteditable="true" data-placeholder="內文" class="content"><b>(DMG🗡️22 + 吸血🩸8% + 爆擊傷害 50%)</b> <br>每次命中，獲得&nbsp;<b>CRI RATE🎯+ 12% </b>四秒（最多4層）。被攻擊時，36%機率減少1層。</td>
+        </tr>
+        <tr>
+            <td contenteditable="true" data-placeholder="標題" class="label"><b>Sin of Greed Golden Scythe<br>貪婪之鐮</b><br><br></td>
+            <td contenteditable="true" data-placeholder="內文" class="content"><b>(DMG🗡️22)</b> <br>攻擊有25%機率施加「貪婪慾望」兩秒（最多3層）。<br>效果：目標<b>DMG🗡️</b>降低15%，自身每秒消耗&nbsp;<b>HP❤️</b>&nbsp;4%。</td>
+        </tr>
+        <tr>
+            <td contenteditable="true" data-placeholder="標題" class="label"><b>Sin of Sloth Calamity Blade<br>怠惰劍</b><br><br></td>
+            <td contenteditable="true" data-placeholder="內文" class="content"><b>(DMG🗡️22 + 吸血🩸6%)<br></b>攻擊後得到「怠惰效果」兩秒。期間下次攻擊的傷害會乘以效果持續時間（倍率=1+秒數），並清除效果。</td>
+        </tr>
+        <tr>
+            <td contenteditable="true" data-placeholder="標題" class="label empty"><br></td>
+            <td contenteditable="true" data-placeholder="內文" class="content empty"></td>
+        </tr>
+    </tbody>
+    </table>
+
+    <div class="controls">
+        <button onclick="addRow()">新增一行</button>
+        <button onclick="deleteRow()">刪除末行</button>
+    </div>
+
+    <script>
+        function setupCell(cell, placeholder, className) {
+            cell.setAttribute("contenteditable", "true");
+            cell.setAttribute("data-placeholder", placeholder);
+            cell.className = className;
+            updatePlaceholder(cell);
+
+            cell.addEventListener("input", () => {
+                updatePlaceholder(cell);
+            });
+        }
+
+        function updatePlaceholder(cell) {
+            const text = cell.innerText.replace(/\u200B/g, "").trim(); // 移除零寬字元
+            if (text === "") {
+                cell.classList.add("empty");
+            } else {
+                cell.classList.remove("empty");
+            }
+        }
+
+        function addRow() {
+            const table = document.getElementById("myTable").getElementsByTagName('tbody')[0];
+            const newRow = table.insertRow();
+
+            const cell1 = newRow.insertCell(0);
+            const cell2 = newRow.insertCell(1);
+
+            setupCell(cell1, "標題", 'label');
+            setupCell(cell2, "內文", 'content');
+        }
+
+        function deleteRow() {
+            const table = document.getElementById("myTable").getElementsByTagName('tbody')[0];
+            if (table.rows.length > 0) {
+                table.deleteRow(-1); // -1 代表最後一行
+            }
+        }
+
+        // 初始化現有儲存格
+        document.querySelectorAll('#myTable td').forEach(cell => {
+             updatePlaceholder(cell);
+             cell.addEventListener("input", () => updatePlaceholder(cell));
+        });
+    </script>
+
+</body></html>
