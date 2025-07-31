@@ -1,0 +1,754 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>裝備配置模擬器 & 資訊</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- ▼▼▼ 請將這段新的全局動畫層加到這裡 ▼▼▼ -->
+    <div id="global-effects-layer">
+        <div class="effects-wrapper" id="player-effects-wrapper">
+            <!-- 玩家的所有動畫元素將被JS動態加入這裡 -->
+        </div>
+        <div class="effects-wrapper" id="enemy-effects-wrapper">
+            <!-- 敵人的所有動畫元素將被JS動態加入這裡 -->
+        </div>
+    </div>
+    <!-- ▲▲▲ 新增全局動畫層結束 ▲▲▲ -->
+
+    <div id="flash-overlay"></div> <!-- 您原有的閃光層可以保留 -->
+
+    
+    <!-- Calculator HTML -->
+    <div class="main-container">
+        <!-- Player Panel -->
+        <div class="panel-wrapper">
+            <div id="player-display" class="player-display">
+                <div id="player-image-container" class="player-image-container">
+                    <div id="player-effect-overlay" class="effect-overlay"></div>
+                    <img src="player.png" alt="Player" id="player-image" class="player-image">
+                </div>
+                <div id="player-current-hp" class="current-hp-display"></div>
+                <div class="hp-bar">
+                    <div id="player-hp-bar-shield" class="hp-bar-shield"></div>
+                    <div id="player-hp-bar-inner" class="hp-bar-inner"></div>
+                </div>
+            </div>
+            <div id="player-stats" class="stats-display"></div>
+            <div id="player-skills-display" class="skills-display"><h3>啟動技能</h3><div id="player-skills-list"></div></div>
+            <div id="player-panel" class="config-panel"></div>
+        </div>
+
+        <!-- Center Controls -->
+        <div class="center-controls">
+            <div class="attack-group">
+                <button id="attack-enemy-btn" class="attack-button">🗡️</button>
+                <span class="arrow">→</span>
+            </div>
+            <button id="mutual-attack-btn" class="attack-button" title="互擊 (E鍵)">⚔️</button>
+            <div class="attack-group">
+                <span class="arrow">←</span>
+                <button id="attack-player-btn" class="attack-button">🗡️</button>
+            </div>
+        </div>
+
+        <!-- Enemy Panel -->
+        <div class="panel-wrapper">
+             <div id="enemy-display" class="player-display">
+                <div id="enemy-image-container" class="player-image-container">
+                    <div id="enemy-effect-overlay" class="effect-overlay"></div>
+                    <img src="player.png" alt="Enemy" id="enemy-image" class="player-image">
+                </div>
+                <div id="enemy-current-hp" class="current-hp-display"></div>
+                <div class="hp-bar">
+                    <div id="enemy-hp-bar-shield" class="hp-bar-shield"></div>
+                    <div id="enemy-hp-bar-inner" class="hp-bar-inner"></div>
+                </div>
+            </div>
+            <div id="enemy-stats" class="stats-display"></div>
+            <div id="enemy-skills-display" class="skills-display"><h3>啟動技能</h3><div id="enemy-skills-list"></div></div>
+            <div id="enemy-panel" class="config-panel"></div>
+        </div>
+    </div>
+    
+    <!-- Info HTML -->
+    <div class="info-container">
+        <button type="button" class="collapsible">裝備 (Sets)</button>
+        <div class="content">
+            <div class="item-container">
+                <div class="item-name">POSEIDON 海王</div>
+                <div class="item-images">
+                    <img src="./mvp sets_files/1354721724335259884.webp" alt="Poseidon Helmet">
+                    <img src="./mvp sets_files/1354721737467498608.webp" alt="Poseidon Armor">
+                    <img src="./mvp sets_files/1354721750692139039.webp" alt="Poseidon Legguards">
+                    <img src="./mvp sets_files/1354721767708561421.webp" alt="Poseidon Boots">
+                    <img src="./mvp sets_files/1354721780635533445.webp" alt="Poseidon Cloak">
+                </div>
+                <div class="item-description">
+                    <b>(DEF:24 HP:94)</b><br>
+                    (2/4) = <b>CRI Rate🎯</b> +15%<br>
+                    (4/4) = <b>CRI DMG</b> +90%<br>
+                    當你的攻擊爆擊時，有35%的機率免疫如暈眩等控場效果，並且治療效果+100%，持續2秒。
+                </div>
+            </div>
+            <div class="item-container">
+                <div class="item-name">ZEUS 宙斯</div>
+                <div class="item-images">
+                    <img src="./mvp sets_files/1354721892472193074.webp" alt="Zeus Helmet">
+                    <img src="./mvp sets_files/1354721905420271676.webp" alt="Zeus Armor">
+                    <img src="./mvp sets_files/1354721915721482253.webp" alt="Zeus Legguards">
+                    <img src="./mvp sets_files/1354721935464075355.webp" alt="Zeus Boots">
+                    <img src="./mvp sets_files/1354721951876255914.webp" alt="Zeus Cloak">
+                </div>
+                <div class="item-description">
+                    <b>(DEF:24 HP:94)</b><br>
+                    (2/4) = 當你的 <b>Max HP</b> ≥ 110時，<b>HP❤️</b> +10<br>
+                    (4/4) = <b>HP❤️</b> 每減少1%，<b>吸血🩸</b> +0.35%。
+                </div>
+            </div>
+            <div class="item-container">
+                <div class="item-name">HADES 哈迪斯</div>
+                <div class="item-images">
+                    <img src="./mvp sets_files/1354722073058082876.webp" alt="Hades Helmet">
+                    <img src="./mvp sets_files/1354722085766697153.webp" alt="Hades Armor">
+                    <img src="./mvp sets_files/1354722100581109760.webp" alt="Hades Legguards">
+                    <img src="./mvp sets_files/1354722115235876945.webp" alt="Hades Boots">
+                    <img src="./mvp sets_files/1354722130482167972.webp" alt="Hades Cloak">
+                </div>
+                <div class="item-description">
+                    <b>(DEF:24 HP:94)</b><br>
+                    (2/4) = 當你的 <b>DEF🛡️</b> ≥ 28時，<b>HP❤️</b> +20<br>
+                    (4/4) = 當你擊中任何人時，有40%的機率召喚地獄犬，持續15秒（最多2隻）。<br>
+                    （地獄犬會對目標造成6點傷害並賦予其死亡印記。如果你攻擊帶有死亡印記的目標，將會額外造成2點傷害）
+                </div>
+            </div>
+             <div class="item-container">
+                <div class="item-name">ARES 阿瑞斯</div>
+                <div class="item-images">
+                    <img src="./mvp sets_files/1354722434804093101.webp" alt="Ares Helmet">
+                    <img src="./mvp sets_files/1354722448238575748.webp" alt="Ares Armor">
+                    <img src="./mvp sets_files/1354722460876144792.webp" alt="Ares Legguards">
+                    <img src="./mvp sets_files/1354722471500054629.webp" alt="Ares Boots">
+                    <img src="./mvp sets_files/1354722483533779036.webp" alt="Ares Cloak">
+                </div>
+                <div class="item-description">
+                    <b>(DEF:19 DMG:7.5 HP:122)</b><br>
+                    (2/4) = <b>DMG🗡️</b> +3<br>
+                    (4/4) = 每次攻擊命中第4次後，會產生一個持續5秒的護盾，可以免疫一次主動傷害。
+                </div>
+            </div>
+            <div class="item-container">
+                <div class="item-name">APOLLO 阿波羅</div>
+                <div class="item-images">
+                    <img src="./mvp sets_files/1354894145021546637.webp" alt="Apollo Helmet">
+                    <img src="./mvp sets_files/1354894157126176938.webp" alt="Apollo Armor">
+                    <img src="./mvp sets_files/1354894170111873075.webp" alt="Apollo Legguards">
+                    <img src="./mvp sets_files/1354894184456388902.webp" alt="Apollo Boots">
+                    <img src="./mvp sets_files/1354894196967870584.webp" alt="Apollo Cloak">
+                </div>
+                <div class="item-description">
+                    <b>(DEF:24 HP:94)</b><br>
+                    (2/4) = 當你的 <b>DEF🛡️</b> ≥ 26時，<b>DEF🛡️</b> +1<br>
+                    (4/4) = 每次攻擊命中第4次後，太陽升起，對周圍所有敵人每秒造成6點傷害，持續3秒。
+                </div>
+            </div>
+            <div class="item-container">
+                <div class="item-name">FENRIR 芬尼爾狼</div>
+                <div class="item-images">
+                    <img src="./mvp sets_files/1354894450630983833.webp" alt="Fenrir Helmet">
+                    <img src="./mvp sets_files/1354894462609788948.webp" alt="Fenrir Armor">
+                    <img src="./mvp sets_files/1354894474618081378.webp" alt="Fenrir Legguards">
+                    <img src="./mvp sets_files/1354894487402320124.webp" alt="Fenrir Boots">
+                    <img src="./mvp sets_files/1354894499112816990.webp" alt="Fenrir Cloak">
+                </div>
+                <div class="item-description">
+                    <b>(DEF:19 DMG:7.5 HP:122)</b><br>
+                    (2/4) = 當你的 <b>Max HP</b> ≥ 140時，<b>傷害減免</b> +12%<br>
+                    (4/4) = 每次攻擊命中第5次後，將進入狂暴狀態（攻擊+6，<b>吸血🩸</b> +25%，防禦-4），持續3秒，並在結束時恢復生命值（相當於狀態期間造成傷害的25%，最多25點）。
+                </div>
+            </div>
+            <div class="item-container">
+                <div class="item-name">VALKYRIE 瓦爾基里</div>
+                <div class="item-images">
+                    <img src="./mvp sets_files/1354894596584247376.webp" alt="Valkyrie Helmet">
+                    <img src="./mvp sets_files/1354894611289735268.webp" alt="Valkyrie Armor">
+                    <img src="./mvp sets_files/1354894626623852736.webp" alt="Valkyrie Legguards">
+                    <img src="./mvp sets_files/1354894638858633339.webp" alt="Valkyrie Boots">
+                    <img src="./mvp sets_files/1354894651177439447.webp" alt="Valkyrie Cloak">
+                </div>
+                <div class="item-description">
+                    <b>(DEF:19 DMG:7.5 HP:122)</b><br>
+                    (2/4) = 當你的 <b>DEF🛡️</b> ≥ 26時，<b>HP❤️</b> +15<br>
+                    (4/4) = 當 <b>HP❤️</b> 高於40%時，<b>傷害減免</b> +18%；<br>
+                    當 <b>HP❤️</b> 低於40%時，你會變身為神之形態，對周圍所有敵人造成10點傷害，<b>吸血🩸</b> +18%，<b>真傷</b> +1。
+                </div>
+            </div>
+            <div class="item-container">
+                <div class="item-name">JORMUNGANDR 耶夢加得</div>
+                <div class="item-images">
+                    <img src="./mvp sets_files/1354894807998398706.webp" alt="Jormungandr Helmet">
+                    <img src="./mvp sets_files/1354894822107779080.webp" alt="Jormungandr Armor">
+                    <img src="./mvp sets_files/1354894834074390568.webp" alt="Jormungandr Legguards">
+                    <img src="./mvp sets_files/1354894845260599326.webp" alt="Jormungandr Boots">
+                    <img src="./mvp sets_files/1354894856991936864.webp" alt="Jormungandr Cloak">
+                </div>
+                <div class="item-description">
+                    <b>(DEF:24 HP:94)</b><br>
+                    (2/4) = 當你的 <b>DEF🛡️</b> ≥ 26時，<b>傷害減免</b> +12%<br>
+                    (4/4) = 每次攻擊命中第4次後，會產生一個持續3秒的護盾（護盾生命值為自身 <b>DEF🛡️</b> 的25%）。當護盾爆炸時，將恢復6點 <b>HP❤️</b>。
+                </div>
+            </div>
+            <div class="item-container">
+                <div class="item-name">THOR 索爾</div>
+                <div class="item-images">
+                    <img src="./mvp sets_files/1354894966169534709.webp" alt="Thor Helmet">
+                    <img src="./mvp sets_files/1354894977569783930.webp" alt="Thor Armor">
+                    <img src="./mvp sets_files/1354894989590790215.webp" alt="Thor Legguards">
+                    <img src="./mvp sets_files/1354895000080482474.webp" alt="Thor Boots">
+                    <img src="./mvp sets_files/1354895011455434934.webp" alt="Thor Cloak">
+                </div>
+                <div class="item-description">
+                    <b>(DEF:24 HP:94)</b><br>
+                    (2/4) = 當你的 <b>Max HP</b> ≥ 110時，<b>DEF🛡️</b> +1.5<br>
+                    (4/4) = 受到傷害時，如果對手的 <b>DMG🗡️</b> > 你的 <b>DEF🛡️</b>，則<b>傷害減免</b> 26%；如果對手的 <b>DMG🗡️</b> < 你的 <b>DEF🛡️</b>，則立即恢復2點 <b>HP❤️</b>。
+                </div>
+            </div>
+            <div class="item-container">
+                <div class="item-name">HELHEIM 海拉</div>
+                <div class="item-images">
+                    <img src="./mvp sets_files/1354895154086940833.webp" alt="Helheim Helmet">
+                    <img src="./mvp sets_files/1354895168343376044.webp" alt="Helheim Armor">
+                    <img src="./mvp sets_files/1354895179668000981.webp" alt="Helheim Legguards">
+                    <img src="./mvp sets_files/1354895191605248211.webp" alt="Helheim Boots">
+                    <img src="./mvp sets_files/1354895204913774732.webp" alt="Helheim Cloak">
+                </div>
+                <div class="item-description">
+                    <b>(DEF:24 HP:94)</b><br>
+                    (2/4) = 當你的 <b>Max HP</b> ≥ 110時，<b>DEF🛡️</b> +1.5<br>
+                    (4/4) = 每次攻擊命中第4次後，會竊取對手 <b>HP❤️</b>（相當於其 <b>DEF🛡️</b> 的25%），並使其中毒（生命恢復效果減半），持續1秒。
+                </div>
+            </div>
+            <div class="item-container">
+                <div class="item-name">HERMES 赫爾墨斯</div>
+                <div class="item-images">
+                    <img src="./mvp sets_files/1354895294784999624.webp" alt="Hermes Helmet">
+                    <img src="./mvp sets_files/1354895306201763971.webp" alt="Hermes Armor">
+                    <img src="./mvp sets_files/1354895318445195557.webp" alt="Hermes Legguards">
+                    <img src="./mvp sets_files/1354895329748848680.webp" alt="Hermes Boots">
+                    <img src="./mvp sets_files/1354895341467471892.webp" alt="Hermes Cloak">
+                </div>
+                <div class="item-description">
+                    <b>(DEF:24 HP:94)</b><br>
+                    (2/4) = 當你的 <b>Max HP</b> ≥ 110時，<b>傷害減免</b> +12%<br>
+                    (4/4) = 當你擊中任何人時，有40%的機率召喚龍捲風，持續3秒（最多2個）。<br>
+                    龍捲風：每1秒對周圍所有敵人造成4點傷害（並附帶15%的減速效果，持續2秒），並為主人恢復2點 <b>HP❤️</b>。
+                </div>
+            </div>
+            <div class="item-container">
+                <div class="item-name">HEPHAESTUS 火神</div>
+                <div class="item-images">
+                    <img src="./mvp sets_files/1354895655755190292.webp" alt="Hephaestus Helmet">
+                    <img src="./mvp sets_files/1354895667176280166.webp" alt="Hephaestus Armor">
+                    <img src="./mvp sets_files/1354895681906806815.webp" alt="Hephaestus Legguards">
+                    <img src="./mvp sets_files/1354895692962857162.webp" alt="Hephaestus Boots">
+                    <img src="./mvp sets_files/1354895704975212544.webp" alt="Hephaestus Cloak">
+                </div>
+                <div class="item-description">
+                    <b>(DEF:19 DMG:7.5 HP:122)</b><br>
+                    (2/4) = 當 <b>HP❤️</b> ≥ 140時，<b>傷害減免</b> +12%<br>
+                    (4/4) = <b>傷害減免</b>+8%，當你造成近戰或技能傷害時，你會獲得1層火球能量，並且你的<b>傷害減免</b>降低2%，持續5秒；當你擁有12層火球能量時，能量層數立即重置並獲得3個火球，持續3秒；<br>
+                    火球效果：每個火球造成你 <b>HP❤️</b> 4%的傷害，並恢復等量生命值<br>
+                    火球觸發：當你受到傷害時，你會釋放1個火球進行反擊；當你造成近戰傷害時，有35%的機率釋放所有火球攻擊敵人。
+                </div>
+            </div>
+            <div class="item-container">
+                <div class="item-name">CHIONE 凜冬之神</div>
+                <div class="item-images">
+                    <img src="./mvp sets_files/1354895788873875476.webp" alt="Chione Helmet">
+                    <img src="./mvp sets_files/1354895802245316758.webp" alt="Chione Armor">
+                    <img src="./mvp sets_files/1354895813406363841.webp" alt="Chione Legguards">
+                    <img src="./mvp sets_files/1354895824739373336.webp" alt="Chione Boots">
+                    <img src="./mvp sets_files/1354895836227834108.webp" alt="Chione Cloak">
+                </div>
+                <div class="item-description">
+                    <b>(DEF:19 DMG:7.5 HP:122)</b><br>
+                    (2/4) = 當你的 <b>Max HP</b> ≥ 140時，<b>傷害減免</b> +12%<br>
+                    (4/4) = 每次攻擊命中第5次後，會以自身為中心產生一個持續3秒的霜凍領域。<br>
+                    （在領域內，你將獲得 <b>DEF🛡️</b>+5，<b>吸血🩸</b>+15%，並獲得+50%的治療效果。當敵人觸碰到邊界時，會觸發冰凍效果）
+                </div>
+            </div>
+            <div class="item-container">
+                <div class="item-name">MEDUSA 梅杜莎</div>
+                <div class="item-images">
+                    <img src="./mvp sets_files/1354895930582765589.webp" alt="Medusa Helmet">
+                    <img src="./mvp sets_files/1354895941265522809.webp" alt="Medusa Armor">
+                    <img src="./mvp sets_files/1354895956381929624.webp" alt="Medusa Legguards">
+                    <img src="./mvp sets_files/1354895979412980025.webp" alt="Medusa Boots">
+                    <img src="./mvp sets_files/1354895990984802435.webp" alt="Medusa Cloak">
+                </div>
+                <div class="item-description">
+                    <b>(DEF:19 DMG:7.5 HP:122)</b><br>
+                    (2/4) = 當你的 <b>DMG🗡️</b> ≥ 32時，<b>傷害減免</b> +12%<br>
+                    (4/4) = 每5次攻擊，將啟動石化凝視效果，持續3秒（在此期間，任何面對你的範圍內的目標將被減速-20%，如果持續時間超過1秒，目標將被完全石化）。<br>
+                    石化目標處於暈眩狀態。當攻擊石化目標時，將對目標造成額外15%的 <b>DMG🗡️</b> 傷害，並恢復等量生命值。
+                </div>
+            </div>
+            <div class="item-container">
+                <div class="item-name">MEOW 貓貓</div>
+                <div class="item-images">
+                    <img src="./mvp sets_files/1356191509434732654.webp" alt="Meow Helmet">
+                    <img src="./mvp sets_files/1356191522390933567.webp" alt="Meow Armor">
+                    <img src="./mvp sets_files/1356191534747357324.webp" alt="Meow Legguards">
+                    <img src="./mvp sets_files/1356191547959283815.webp" alt="Meow Boots">
+                    <img src="./mvp sets_files/1356191560903032832.webp" alt="Meow Cloak">
+                </div>
+                <div class="item-description">
+                    <b>(DEF:19 DMG:7.5 HP:122)</b><br>
+                    (2/4) = 當 <b>HP❤️</b> ≥ 140時，<b>傷害減免</b> +8%<br>
+                    在&lt;奪旗模式&gt;中的加成：<b>吸血🩸</b> +10%<br>
+                    (4/4) = 每次攻擊命中第5次後，將觸發隱形狀態，持續3秒。<br>
+                    隱形時，每次近戰攻擊獲得 <b>真傷</b> +3（最多疊加4次），被攻擊時減少1層。<br>
+                    狀態結束時，恢復相當於隱形期間造成傷害25%的 <b>HP❤️</b>（上限為20）。
+                </div>
+            </div>
+            <div class="item-container">
+                <div class="item-name">LUCIFER 傲慢</div>
+                <div class="item-images">
+                    <img src="./mvp sets_files/1354896130806255888.webp" alt="Lucifer Helmet">
+                    <img src="./mvp sets_files/1354896131758362694.webp" alt="Lucifer Armor">
+                    <img src="./mvp sets_files/1354896191279726913.webp" alt="Lucifer Legguards">
+                    <img src="./mvp sets_files/1354896203976020019.webp" alt="Lucifer Boots">
+                    <img src="./mvp sets_files/1354896216390893599.webp" alt="Lucifer Cloak">
+                </div>
+                <div class="item-description">
+                    <b>(DEF:24 HP:94)</b><br>
+                    (2/4) = 當你的 <b>Max HP</b> ≥ 110時，<b>傷害減免</b> +12%<br>
+                    (4/4) = <b>HP❤️</b> 每減少1%，<b>傷害增幅</b> +0.8%。<br>
+                    當 <b>HP❤️</b> 低於30%時，具有免疫控制效果。
+                </div>
+            </div>
+            <div class="item-container">
+                <div class="item-name">LEVIATHAN 嫉妒</div>
+                <div class="item-images">
+                    <img src="./mvp sets_files/1354896364747755538.webp" alt="Leviathan Helmet">
+                    <img src="./mvp sets_files/1354896378870108311.webp" alt="Leviathan Armor">
+                    <img src="./mvp sets_files/1354896389514985594.webp" alt="Leviathan Legguards">
+                    <img src="./mvp sets_files/1354896401678598275.webp" alt="Leviathan Boots">
+                    <img src="./mvp sets_files/1354896413284368515.webp" alt="Leviathan Cloak">
+                </div>
+                <div class="item-description">
+                    <b>(DEF:19 DMG:7.5 HP:122)</b><br>
+                    (2/4) = 當你的 <b>Max HP</b> ≥ 140時，<b>傷害減免</b> 12%<br>
+                    (4/4) = 近戰攻擊時，有45%的機率獲得一個隨機增益：<br>
+                    如果敵人的攻擊 > 你的攻擊，則獲得 <b>DEF🛡️</b> +5 或 攻擊 +12，持續2秒；<br>
+                    如果敵人的攻擊 ≤ 你的攻擊，則獲得15%的 <b>吸血🩸</b> 或 12%的<b>傷害減免</b>，持續2秒。
+                </div>
+            </div>
+            <div class="item-container">
+                <div class="item-name">BEELZEBUB 暴食</div>
+                <div class="item-images">
+                    <img src="./mvp sets_files/1361249871553630279.webp" alt="Beelzebub Helmet">
+                    <img src="./mvp sets_files/1361249879640248431.webp" alt="Beelzebub Armor">
+                    <img src="./mvp sets_files/1361249887932649592.webp" alt="Beelzebub Legguards">
+                    <img src="./mvp sets_files/1361249895742181426.webp" alt="Beelzebub Boots">
+                    <img src="./mvp sets_files/1361249903631925328.webp" alt="Beelzebub Cloak">
+                </div>
+                <div class="item-description">
+                    <b>(DEF:19 DMG:7.5 HP:122)</b><br>
+                    (2/4) = 當你的 <b>Max HP</b> ≥ 140時，<b>傷害減免</b> 12%<br>
+                    (4/4) = 近戰攻擊有25%的機率召喚爆炸蒼蠅，在1.5秒後引爆，造成10點傷害並使敵人暈眩1秒，同時為你恢復5%的 <b>HP❤️</b>（最多2隻）。
+                </div>
+            </div>
+            <div class="item-container">
+                <div class="item-name">SAMAEL 憤怒</div>
+                <div class="item-images"></div>
+                <div class="item-description">
+                    <b>(DEF:19 DMG:7.5 HP:122)</b><br>
+                    (2/4) 當 <b>HP❤️</b> >= 140, <b>傷害減免</b> +12%<br>
+                    (4/4) 憤怒: 受到傷害時獲得1點憤怒，或爆擊時獲得2點憤怒（最多10點）。<br>
+                    I. 當憤怒少於5點時，受到傷害時每點憤怒恢復1-2點 <b>HP❤️</b>。<br>
+                    II. 當憤怒多於5點時，每點憤怒獲得+5%的 <b>CRI Rate🎯</b>。<br>
+                    III. 在憤怒值滿時，下一次攻擊造成2.5倍傷害並恢復50%的 <b>HP❤️</b>，然後清除所有憤怒。
+                </div>
+            </div>
+            <div class="item-container">
+                <div class="item-name">MAMMON 貪婪</div>
+                <div class="item-images"></div>
+                <div class="item-description">
+                    <b>(DEF:19 DMG:7.5 HP:122)</b><br>
+                    (2/4) 當 <b>HP❤️</b> >= 140, <b>傷害減免</b> +12%<br>
+                    (4/4) 每次攻擊隨機竊取目標以下其中一種屬性，持續1秒。<br>
+                    （隨機選項：4點 <b>DMG🗡️</b>，2% <b>HP❤️</b>，8% <b>傷害減免</b>）
+                </div>
+            </div>
+            <div class="item-container" style="border-bottom: none;">
+                <div class="item-name">BELPHEGOR 怠惰</div>
+                <div class="item-images"></div>
+                <div class="item-description">
+                    <b>(DEF:19 DMG:7.5 HP:122)</b><br>
+                    (2/4) 當 <b>HP❤️</b> >=140, <b>傷害減免</b> +12%<br>
+                    (4/4) 攻擊後，獲得睡眠效果，持續2秒。<br>
+                    在效果期間，造成的傷害會被累積。當效果結束時，產生一個相當於累積傷害50%的生命護盾（最多18）。
+                </div>
+            </div>
+        </div>
+
+        <button type="button" class="collapsible">武器 (Weapons)</button>
+        <div class="content">
+            <div class="item-container">
+                <div class="item-name"><b>Poseidon Trident<br>海王三叉戟</b></div>
+                <div class="item-images"><img src="./weapons_files/1354721693955919979.webp" alt="PoseidonWeapon"></div>
+                <div class="item-description"><b>(DMG🗡️22 + CRI RATE🎯25%)</b><br>可發射「水泡」進行遠程攻擊。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Zeus' Lighting<br>宙斯閃電</b></div>
+                <div class="item-images"><img src="./weapons_files/1354721867151446077.webp" alt="ZeusWeapon"></div>
+                <div class="item-description"><b>(DMG🗡️22)</b><br>每降低2%<b>HP❤️</b>，<b>真傷</b> + 0.16。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Sword of Hades<br>哈迪斯劍</b></div>
+                <div class="item-images"><img src="./weapons_files/1354722045061107723.webp" alt="HadesWeapon"></div>
+                <div class="item-description"><b>(DMG🗡️22)</b><br>每4次命中，造成 <b>Max HP</b>*6% 的<b>真傷</b>，恢復<b>HP❤️</b>8%。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Spear of Ares<br>阿瑞斯矛</b></div>
+                <div class="item-images"><img src="./weapons_files/1354722398938857583.webp" alt="AresWeapon"></div>
+                <div class="item-description"><b>(DMG🗡️22)</b><br>每3次命中，恢復 <b>HP❤️</b>5%，降低對手 3 <b>DEF🛡️</b> 五秒。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Apollo's Sun Sword<br>阿波羅日輪劍</b></div>
+                <div class="item-images"><img src="./weapons_files/1354894116181377172.webp" alt="ApolloWeapon"></div>
+                <div class="item-description"><b>(DMG🗡️22)(吸血🩸 +6%)</b><br>20%機率「暈眩」目標1秒。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Fenrir's God-Killing Sword<br>芬尼爾弒神劍</b></div>
+                <div class="item-images"><img src="./weapons_files/1354894426224328815.webp" alt="FenrirWeapon"></div>
+                <div class="item-description"><b>(DMG🗡️22)(吸血🩸 +6%)</b><br>每4次命中，對周圍敵人造成 8🗡️ 傷害。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Valkyrie's Divine Dual Blades<br>瓦爾基里雙刃</b></div>
+                <div class="item-images"><img src="./weapons_files/1354894568444661890.webp" alt="ValkyrieWeapon"></div>
+                <div class="item-description"><b>(DMG🗡️22)(吸血🩸 +8%)</b><br>35%機率觸發「連擊」。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Jormungandr's White Snake Sword<br>耶夢加得白蛇劍</b></div>
+                <div class="item-images"><img src="./weapons_files/1354894784107380967.webp" alt="JormungandrWeapon"></div>
+                <div class="item-description"><b>(DMG🗡️22)</b><br>每次命中，獲得<b>真傷</b>+1，持續4秒（最多8層）。<br>被攻擊時，36%機率減少1層。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Mjollnir<br>雷神之槌</b></div>
+                <div class="item-images"><img src="./weapons_files/1354894939552485516.webp" alt="ThorWeapon"></div>
+                <div class="item-description"><b>(DMG🗡️22)</b><br>每次攻擊獲得1層「靜電」，有25%機率「釋放」。<br>每釋放一層靜電，<b>DMG🗡️</b>+3，恢復 <b>HP❤️</b>（<b>DMG🗡️</b> * 10% * 層數）。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Helheim Sword<br>冥府劍</b></div>
+                <div class="item-images"><img src="./weapons_files/1354895125263941783.webp" alt="HelheimWeapon"></div>
+                <div class="item-description"><b>(DMG🗡️22)</b><br>每4次命中，竊取對手<b>HP❤️</b>（<b>DEF🛡️</b>的20%）與 <b>DMG🗡️</b> * 6，持續1秒。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Hermes's Scepter Sword<br>赫爾莫斯權杖劍</b></div>
+                <div class="item-images"><img src="./weapons_files/1354895268910207056.webp" alt="Hermes Scepter"></div>
+                <div class="item-description"><b>(DMG🗡️22)</b><br>每降低10%<b>HP❤️</b>，速度+1.5%。<br>35%機率「斬首」，造成目標 已損失HP * 20% 的傷害（最高25），恢復 <b>HP❤️</b>（該傷害 * 40%）。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Flame Excalibur<br>火神劍</b></div>
+                <div class="item-images"><img src="./weapons_files/1354895631000404109.webp" alt="HephaestusWeapon"></div>
+                <div class="item-description"><b>(DMG🗡️22)</b><br>每4次命中，將敵人捲入「火焰漩渦」。2秒內攻擊 1~3 次。每次攻擊造成 <b>Max HP</b> * 3% 的傷害，恢復等量<b>HP❤️</b>。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Permafrost Sword<br>臻冰劍</b></div>
+                <div class="item-images"><img src="./weapons_files/1354895763775295489.webp" alt="ChioneWeapon"></div>
+                <div class="item-description"><b>(DMG🗡️22 + 吸血🩸6%)</b><br>每5次命中，對目標造成2秒「冰凍」（被冰凍期間無法移動，受擊造成 1~5點 的額外傷害並解除）。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Medusa's Spear<br>梅杜莎矛</b></div>
+                <div class="item-images"><img src="./weapons_files/1354895907144994817.webp" alt="MedusaWeapon"></div>
+                <div class="item-description"><b>(DMG🗡️22)</b><br>25%機率施加「中毒」狀態三秒（最多3層）。<br>中毒效果：目標所受治療效果減半；每層每秒竊取<b>HP❤️</b>（<b>DMG🗡️</b> * 10%）</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Rainbow Cat Sword<br>彩虹貓劍</b></div>
+                <div class="item-images"><img src="./weapons_files/1356191495287476244.webp" alt="MeowWeapon"></div>
+                <div class="item-description"><b>(DMG🗡️22 + 吸血🩸6%)</b><br>每次命中，獲得 <b>DMG🗡️</b>+2 四秒（最多6層）。被攻擊時，30%機率減少1層。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Sin of Pride Sword<br>傲慢劍</b></div>
+                <div class="item-images"><img src="./weapons_files/1354896071855177879.webp" alt="SinOfPrideWeapon"></div>
+                <div class="item-description"><b>(DMG🗡️22)</b><br>每次命中，獲得 <b>DMG🗡️</b>+2.5 四秒（最多7層）。<br>當 <b>DMG🗡️</b>≥40，<b>吸血🩸</b>+12%。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Sin of Envy Blade<br>嫉妒劍</b></div>
+                <div class="item-images"><img src="./weapons_files/1354896267930501211.webp" alt="SinOfEnvyWeapon"></div>
+                <div class="item-description"><b>(DMG🗡️22)</b><br>近戰攻擊造成 <b>Max HP</b> 3% 的額外傷害。<br>如果目標<b>HP❤️</b> &gt; 自身，恢復自身 <b>HP❤️</b>4%。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Sin of Gluttony Blade<br>暴食劍</b></div>
+                <div class="item-images"><img src="./weapons_files/1361249851291205662.webp" alt="SinOfGluttonyWeapon"></div>
+                <div class="item-description"><b>(DMG🗡️22)</b><br>受到近戰或技能傷害時，獲得<b>吸血🩸</b>+8%（最多6層）。<br>滿層時重置，對周圍敵人造成 12🗡️ 的傷害，並獲得 <b>真傷</b>+3 兩秒。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Sin of Wrath Demon Sword<br>憤怒劍</b></div>
+                <div class="item-images"></div>
+                <div class="item-description"><b>(DMG🗡️22 + 吸血🩸8% + 爆擊傷害 50%)</b><br>每次命中，獲得 <b>CRI RATE🎯</b>+ 12% 四秒（最多4層）。被攻擊時，36%機率減少1層。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Sin of Greed Golden Scythe<br>貪婪之鐮</b></div>
+                <div class="item-images"></div>
+                <div class="item-description"><b>(DMG🗡️22)</b><br>攻擊有25%機率施加「貪婪慾望」兩秒（最多3層）。<br>效果：目標<b>DMG🗡️</b>降低15%，自身每秒消耗 <b>HP❤️</b> 4%。</div>
+            </div>
+            <div class="item-container" style="border-bottom: none;">
+                <div class="item-name"><b>Sin of Sloth Calamity Blade<br>怠惰劍</b></div>
+                <div class="item-images"></div>
+                <div class="item-description"><b>(DMG🗡️22 + 吸血🩸6%)</b><br>攻擊後得到「怠惰效果」兩秒。期間下次攻擊的傷害會乘以效果持續時間（倍率=1+秒數），並清除效果。</div>
+            </div>
+        </div>
+        
+        <button type="button" class="collapsible">盾牌 (Shields)</button>
+        <div class="content">
+            <div class="item-container">
+                <div class="item-name"><b>Poseidon's Shield 海王盾</b></div>
+                <div class="item-images"><img src="./shields_files/Untitled136_20250301105419.png" alt="Poseidon's Shield"></div>
+                <div class="item-description"><b>(DMG🗡️+1, DEF🛡️+2)</b><br>當攻擊造成爆擊時，有50%的機率立即回復 2點<b>HP❤️</b>。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Demon Bat (Bat Ring) 蝙蝠戒指</b></div>
+                <div class="item-images"><img src="./shields_files/Untitled136_20250301102552.png" alt="Demon Bat (Bat Ring)"></div>
+                <div class="item-description"><b>(DEF🛡️+1)</b></div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Frost Ring 冰霜戒指</b></div>
+                <div class="item-images"><img src="./shields_files/Untitled136_20250301102627.png" alt="Frost Ring"></div>
+                <div class="item-description"><b>(DEF🛡️+2)</b></div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Nightmare Knights Shield 夢魘盾</b></div>
+                <div class="item-images"><img src="./shields_files/Untitled136_20250301103811.png" alt="Nightmare Knights Shield"></div>
+                <div class="item-description"><b>(DEF🛡️+3)</b></div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Ice & Snow Bracelet 冰雪手鐲</b></div>
+                <div class="item-images"><img src="./shields_files/Untitled136_20250301103842.png" alt="Ice & Snow Bracelet"></div>
+                <div class="item-description"><b>(DMG🗡️+3)</b></div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Cancer Ring 巨蟹座戒指</b></div>
+                <div class="item-images"><img src="./shields_files/Untitled136_20250301103908.png" alt="Cancer Ring"></div>
+                <div class="item-description"><b>(DMG🗡️+5)</b></div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Hare Ring 兔魂戒指</b></div>
+                <div class="item-images"><img src="./shields_files/Untitled136_20250301104243.png" alt="Hare Ring"></div>
+                <div class="item-description"><b>(DEF🛡️+1, 速度+5%)</b><br>提升5%的移動速度。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Steampunk Explorer Shield 蒸氣朋克盾</b></div>
+                <div class="item-images"><img src="./shields_files/Untitled136_20250301104327.png" alt="Steampunk Explorer Shield"></div>
+                <div class="item-description"><b>(HP❤️+12, DEF🛡️+1)</b><br>每當 <b>HP❤️</b> 減少1%，便會獲得 +0.25% 的<b>傷害減免</b>。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Shield of Ares 阿瑞斯之盾</b></div>
+                <div class="item-images"><img src="./shields_files/Untitled136_20250301105302.png" alt="Shield of Ares"></div>
+                <div class="item-description"><b>(HP❤️+6, DEF🛡️+2)</b><br>當你受到傷害時，有15%的機率對攻擊者施加「重創」效果，持續3秒。（此效果會使目標的生命回復效果減半）</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Christmas Ring (2023) 2023聖誕戒指</b></div>
+                <div class="item-images"><img src="./shields_files/Untitled136_20250301105153.png" alt="Christmas Ring (2023)"></div>
+                <div class="item-description"><b>(HP❤️+10, DEF🛡️+1)</b><br>每4秒回復 2點<b>HP❤️</b>。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Star & Moon Ring 星月戒指</b></div>
+                <div class="item-images"><img src="./shields_files/Untitled136_20250301105234.png" alt="Star & Moon Ring"></div>
+                <div class="item-description"><b>(HP❤️+10, DEF🛡️+1)</b><br>每當第4次攻擊命中敵人時，自身移動速度提升20%，持續2秒。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Turtle Carapace 龜甲</b></div>
+                <div class="item-images"><img src="./shields_files/Untitled136_20250301105348.png" alt="Turtle Carapace"></div>
+                <div class="item-description"><b>(HP❤️+12, DEF🛡️+1, 速度-15%, 傷害減免+6%)</b><br>降低15%的移動速度，但提供6%的<b>傷害減免</b>。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Silver Knight Shield 白銀騎士盾</b></div>
+                <div class="item-images"><img src="./shields_files/Untitled136_20250301123039.png" alt="Silver Knight Shield"></div>
+                <div class="item-description"><b>(HP❤️+4, DEF🛡️+1)</b><br>每4秒回復 1點<b>HP❤️</b>。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Scarlet Knight Shield 緋紅騎士盾</b></div>
+                <div class="item-images"><img src="./shields_files/Untitled136_20250301123310.png" alt="Scarlet Knight Shield"></div>
+                <div class="item-description"><b>(HP❤️+6, DMG🗡️+2)</b></div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Black Gold Knight Shield 黑金騎士盾</b></div>
+                <div class="item-images"><img src="./shields_files/Untitled136_20250301124039.png" alt="Black Gold Knight Shield"></div>
+                <div class="item-description"><b>(HP❤️+10, DEF🛡️+1)</b></div>
+            </div>
+            <div class="item-container" style="border-bottom: none;">
+                <div class="item-name"><b>Trash Lid Shield 垃圾桶蓋盾</b></div>
+                <div class="item-images"><img src="./shields_files/Untitled136_20250329204837.png" alt="Trash Lid Shield"></div>
+                <div class="item-description"><b>(DEF🛡️+2)</b></div>
+            </div>
+        </div>
+
+        <button type="button" class="collapsible">稱號 (Titles)</button>
+        <div class="content">
+            <div class="item-container">
+                <div class="item-name"><b>KING OF GODS 宙斯稱</b></div>
+                <div class="item-images title-image"><img src="./titles/IMG_2750.png" alt="KING OF GODS 宙斯稱"></div>
+                <div class="item-description"><b>(HP❤️+15)</b></div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>GOD OF DEAD 哈迪斯稱</b></div>
+                <div class="item-images title-image"><img src="./titles/IMG_2748.png" alt="GOD OF DEAD 哈迪斯稱"></div>
+                <div class="item-description"><b>(HP❤️+10, 傷害增幅+5%)</b></div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>GOD OF WAR 阿瑞斯稱</b></div>
+                <div class="item-images title-image"><img src="./titles/Screenshot_2024-09-30-21-41-51-84.png" alt="GOD OF WAR 阿瑞斯稱"></div>
+                <div class="item-description"><b>(HP❤️+5, CRI Rate🎯+15%)</b></div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>GOD OF THE SUN 阿波羅稱</b></div>
+                <div class="item-images title-image"><img src="./titles/Screenshot_2024-10-18-23-15-16-15.png" alt="GOD OF THE SUN 阿波羅稱"></div>
+                <div class="item-description"><b>(HP❤️+5)</b><br>近戰攻擊時有15%的機率點燃周圍的敵人，在1秒內每0.5秒造成4點傷害。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>FENRIR WOLF 芬尼爾狼稱</b></div>
+                <div class="item-images title-image"><img src="./titles/IMG_0552.png" alt="FENRIR WOLF 芬尼爾狼稱"></div>
+                <div class="item-description"><b>(HP❤️+5)</b><br>每次攻擊命中時，獲得 <b>DMG🗡️</b>+1 的效果，持續4秒（最多疊加6層）。被攻擊時，有36%的機率減少1層效果。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>VALKYRIE 瓦爾基里稱</b></div>
+                <div class="item-images title-image"><img src="./titles/IMG_0974.png" alt="VALKYRIE 瓦爾基里稱"></div>
+                <div class="item-description"><b>(HP❤️+5, 真傷 0-2)</b><br>每次攻擊隨機造成 0-2 點的<b>真傷</b>。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>WORLD SERPENT 耶夢加得稱</b></div>
+                <div class="item-images title-image"><img src="./titles/IMG_2752.png" alt="WORLD SERPENT 耶夢加得稱"></div>
+                <div class="item-description"><b>(HP❤️+10, 傷害減免+3%)</b></div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>GOD OF THUNDER 索爾稱</b></div>
+                <div class="item-images title-image"><img src="./titles/IMG_2749.png" alt="GOD OF THUNDER 索爾稱"></div>
+                <div class="item-description"><b>(HP❤️+5, 真傷+1)</b></div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>LORD OF HELHEIM 海拉稱</b></div>
+                <div class="item-images title-image"><img src="./titles/Screenshot_2024-09-21-15-55-32-98.png" alt="LORD OF HELHEIM 海拉稱"></div>
+                <div class="item-description"><b>(HP❤️+5)</b><br>當你擊殺任何玩家時，立即回復 20% <b>HP❤️</b>。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>GOD OF BOUNDARIES 赫爾墨斯稱</b></div>
+                <div class="item-images title-image"><img src="./titles/IMG_0264.png" alt="GOD OF BOUNDARIES 赫爾墨斯稱"></div>
+                <div class="item-description"><b>(HP❤️+5, 速度+5%)</b><br>每4秒回復 2點<b>HP❤️</b>。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>GOD OF FIRE 火神稱</b></div>
+                <div class="item-images title-image"><img src="./titles/IMG_0736.png" alt="GOD OF FIRE 火神稱"></div>
+                <div class="item-description"><b>(HP❤️+5)</b><br>攻擊時有25%的機率造成等同於自身 <b>HP❤️</b> 3%的<b>真傷</b>。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>GOD OF WINTER 凜冬之神稱</b></div>
+                <div class="item-images title-image"><img src="./titles/IMG_1157.png" alt="GOD OF WINTER 凜冬之神稱"></div>
+                <div class="item-description"><b>(HP❤️+10, 治療效果+10%)</b><br>獲得的所有治療效果提升10%。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>THE GORGON 梅杜莎稱</b></div>
+                <div class="item-images title-image"><img src="./titles/IMG_1837.png" alt="THE GORGON 梅杜莎稱"></div>
+                <div class="item-description"><b>(DMG🗡️+3)</b><br>攻擊命中玩家時，有15%的機率降低其移動速度15%，持續2秒。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Sin of Pride 傲慢稱</b></div>
+                <div class="item-images title-image"><img src="./titles/IMG_2215.png" alt="Sin of Pride 傲慢稱"></div>
+                <div class="item-description"><b>(HP❤️+5)</b><br>近戰攻擊命中時，回復等同於自身 <b>DEF🛡️</b> 4%的<b>HP❤️</b>。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Sin of Envy 嫉妒稱</b></div>
+                <div class="item-images title-image"><img src="./titles/Untitled177_20250314150421.png" alt="Sin of Envy 嫉妒稱"></div>
+                <div class="item-description"><b>(HP❤️+5)</b><br>近戰攻擊時，有50%機率回復 2% <b>Max HP</b>。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Sins of Gluttony 暴食稱</b></div>
+                <div class="item-images title-image"><img src="./titles/Untitled177_20250412094852.png" alt="Sins of Gluttony 暴食稱"></div>
+                <div class="item-description"><b>(HP❤️+5)</b><br>近戰攻擊時有30%的機率，對目標造成等同於自身已損失 <b>HP❤️</b> 3%的傷害，並回復等量的 <b>HP❤️</b>。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Sins of Wrath 憤怒稱</b></div>
+                <div class="item-images title-image"><img src="./titles/Untitled177_20250516110654.png" alt="Sins of Wrath 憤怒稱"></div>
+                <div class="item-description"><b>(HP❤️+5)</b><br>當你的攻擊爆擊時，有50%的機率獲得 +10% <b>傷害減免</b>，持續1秒。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Sin of Greed 貪婪稱</b></div>
+                <div class="item-images title-image"><img src="./titles/Untitled177_20250613113203.png" alt="Sin of Greed 貪婪稱"></div>
+                <div class="item-description"><b>(HP❤️+5)</b><br>每2次攻擊，從目標身上吸取等同於自身 <b>HP❤️</b> 1%的生命。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Sins of Sloth 怠惰稱</b></div>
+                <div class="item-images title-image"><img src="./titles/Untitled177_20250711111140.png" alt="Sins of Sloth 怠惰稱"></div>
+                <div class="item-description"><b>(HP❤️+5)</b><br>每當第3次攻擊命中後，<b>真傷</b>+3，持續2秒。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Pass Anniversary Title 通行證一周年紀念</b></div>
+                <div class="item-images title-image"><img src="./titles/IMG_2753.png" alt="Pass Anniversary Title 通行證一周年紀念"></div>
+                <div class="item-description"><b>(HP❤️+10)</b></div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Ocean Conqueror 海洋征服者</b></div>
+                <div class="item-images title-image"><img src="./titles/IMG_2751.png" alt="Ocean Conqueror 海洋征服者"></div>
+                <div class="item-description"><b>(HP❤️+12)</b></div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>PASS 2ND ANNIVERSARY 通行證兩周年紀念</b></div>
+                <div class="item-images title-image"><img src="./titles/Screenshot_2024-09-21-16-10-45-44.png" alt="PASS 2ND ANNIVERSARY 通行證兩周年紀念"></div>
+                <div class="item-description"><b>(HP❤️+10)</b></div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>PUMPKIN DEFENSE 50</b></div>
+                <div class="item-images title-image"><img src="./titles/Screenshot_2024-10-14-18-09-26-85.png" alt="PUMPKIN DEFENSE 50"></div>
+                <div class="item-description"><b>(HP❤️+10)</b></div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>PUMPKIN DEFENSE 99</b></div>
+                <div class="item-images title-image"><img src="./titles/Screenshot_2024-10-14-18-09-42-63-1.png" alt="PUMPKIN DEFENSE 99"></div>
+                <div class="item-description"><b>(HP❤️+5, 吸血🩸+4%)</b></div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>ESCAPE DOMINATOR</b></div>
+                <div class="item-images title-image"><img src="./titles/IMG_0404.png" alt="ESCAPE DOMINATOR"></div>
+                <div class="item-description"><b>(HP❤️+5)</b><br>每當你擊殺一名玩家，<b>傷害增幅</b>+3%（最多疊加3次，死亡後減少1層）。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>ESCAPE MASTER</b></div>
+                <div class="item-images title-image"><img src="./titles/IMG_0410.png" alt="ESCAPE MASTER"></div>
+                <div class="item-description"><b>(真傷+0.5)</b></div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>ESCAPE ACE</b></div>
+                <div class="item-images title-image"><img src="./titles/IMG_0411.png" alt="ESCAPE ACE"></div>
+                <div class="item-description"><b>(HP❤️+10)</b></div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Silver Knight 銀牙騎士</b></div>
+                <div class="item-images title-image"><img src="./titles/IMG_2352.png" alt="Silver Knight 銀牙騎士"></div>
+                <div class="item-description"><b>(HP❤️+2)</b><br>擊殺玩家或怪物後，在5秒內每秒回復2點<b>HP❤️</b>。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Scarlet Knight 緋紅騎士</b></div>
+                <div class="item-images title-image"><img src="./titles/IMG_2354.png" alt="Scarlet Knight 緋紅騎士"></div>
+                <div class="item-description"><b>(HP❤️+3)</b><br>擊殺玩家或怪物後，立即回復3點<b>HP❤️</b>。</div>
+            </div>
+            <div class="item-container">
+                <div class="item-name"><b>Black Gold Knight 黑金騎士</b></div>
+                <div class="item-images title-image"><img src="./titles/IMG_2350.png" alt="Black Gold Knight 黑金騎士"></div>
+                <div class="item-description"><b>(DMG🗡️+1, 吸血🩸+3%)</b></div>
+            </div>
+            <div class="item-container" style="border-bottom: none;">
+                <div class="item-name"><b>Supereme</b></div>
+                <div class="item-images title-image"><img src="./titles/Untitled177_20250411105243-1.png" alt="Supereme"></div>
+                <div class="item-description"><b>(HP❤️+12, 吸血🩸+5%)</b><br>體型微幅增加。<br>每4次攻擊命中後，移動速度提升10%，持續1.5秒。</div>
+            </div>
+        </div>
+    </div>
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
