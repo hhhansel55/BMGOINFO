@@ -509,7 +509,7 @@ function handleDamageEffect(panelType) {
 
     // START: 找到圖片元素來改變 src
     const image = document.getElementById(`${panelType}-image`);
-    image.src = "./dmg.png";
+    image.src = "./dmg.webp";
     // END: 找到圖片元素來改變 src
 
     setTimeout(() => {
@@ -1321,3 +1321,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 });
+
